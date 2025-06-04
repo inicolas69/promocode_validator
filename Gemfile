@@ -54,5 +54,6 @@ group :development, :test do
   gem "rubocop-rails"
   gem "rubocop-rspec"
   gem "ruby-lsp-rails"
+  gem "shoulda-matchers"
   gem "standard"
 end
