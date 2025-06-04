@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_06_04_101243) do
+ActiveRecord::Schema[8.0].define(version: 2025_06_04_112242) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -20,5 +20,14 @@ ActiveRecord::Schema[8.0].define(version: 2025_06_04_101243) do
     t.string "name", null: false
     t.jsonb "advantage", default: {}, null: false
     t.index ["name"], name: "index_promo_codes_on_name", unique: true
+  end
+
+  create_table "restriction_groups", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "operator", default: "and", null: false
+    t.string "restrictable_type", null: false
+    t.bigint "restrictable_id", null: false
+    t.index ["restrictable_type", "restrictable_id"], name: "index_restriction_groups_on_restrictable"
   end
 end
