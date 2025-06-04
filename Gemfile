@@ -48,6 +48,7 @@ group :development, :test do
   gem "rspec-rails"
   gem "ruby-lsp"
   gem "rubocop"
+  gem "rubocop-capybara"
   gem "rubocop-factory_bot"
   gem "rubocop-performance"
   gem "rubocop-rails"
