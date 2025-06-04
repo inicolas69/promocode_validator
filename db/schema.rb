@@ -10,7 +10,15 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_06_04_075215) do
+ActiveRecord::Schema[8.0].define(version: 2025_06_04_101243) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
+
+  create_table "promo_codes", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "name", null: false
+    t.jsonb "advantage", default: {}, null: false
+    t.index ["name"], name: "index_promo_codes_on_name", unique: true
+  end
 end
