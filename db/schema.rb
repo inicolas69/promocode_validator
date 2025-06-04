@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_06_04_112242) do
+ActiveRecord::Schema[8.0].define(version: 2025_06_04_115612) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -29,5 +29,15 @@ ActiveRecord::Schema[8.0].define(version: 2025_06_04_112242) do
     t.string "restrictable_type", null: false
     t.bigint "restrictable_id", null: false
     t.index ["restrictable_type", "restrictable_id"], name: "index_restriction_groups_on_restrictable"
+  end
+
+  create_table "restrictions", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "type", null: false
+    t.bigint "restriction_group_id", null: false
+    t.jsonb "conditions", default: {}, null: false
+    t.index ["restriction_group_id"], name: "index_restrictions_on_restriction_group_id"
+    t.index ["type"], name: "index_restrictions_on_type"
   end
 end
