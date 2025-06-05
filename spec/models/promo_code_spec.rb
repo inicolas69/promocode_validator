@@ -1,6 +1,10 @@
 require "rails_helper"
 
 RSpec.describe PromoCode, type: :model do
+  describe "associations" do
+    it { is_expected.to have_many(:restriction_groups).dependent(:destroy) }
+  end
+
   describe "validations" do
     it "is valid with valid attributes" do
       promo_code = PromoCode.new(name: "SUMMER2023", advantage: {percent: 20})
