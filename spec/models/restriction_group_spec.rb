@@ -3,6 +3,8 @@ require "rails_helper"
 RSpec.describe RestrictionGroup, type: :model do
   describe "associations" do
     it { is_expected.to belong_to(:restrictable) }
+    it { is_expected.to have_many(:restrictions).dependent(:destroy) }
+    it { is_expected.to have_many(:restriction_groups).dependent(:destroy) }
   end
 
   describe "validations" do
