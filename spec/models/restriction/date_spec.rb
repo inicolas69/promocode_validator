@@ -38,4 +38,113 @@ RSpec.describe Restriction::Date, type: :model do
       end
     end
   end
+
+  describe "#satisfies_condition" do
+    subject { restriction.satisfies_condition(context) }
+
+    let(:today) { Date.new(2025, 6, 6) }
+    let(:context) { {date: test_date.to_s} }
+
+    context "with only after condition" do
+      let(:restriction) { build(:restriction_date, after: today - 2, before: nil) }
+
+      context "when date is after 'after'" do
+        let(:test_date) { today }
+
+        it "returns valid: true" do
+          expect(subject[:valid]).to be true
+          expect(subject[:reasons]).to be_empty
+        end
+      end
+
+      context "when date is exactly 'after'" do
+        let(:test_date) { today - 2 }
+
+        it "returns valid: false with reason" do
+          expect(subject[:valid]).to be false
+          expect(subject[:reasons]).to include("The date (#{test_date}) must be after #{today - 2}.")
+        end
+      end
+
+      context "when date is before 'after'" do
+        let(:test_date) { today - 5 }
+
+        it "returns valid: false with reason" do
+          expect(subject[:valid]).to be false
+          expect(subject[:reasons]).to include("The date (#{test_date}) must be after #{today - 2}.")
+        end
+      end
+    end
+
+    context "with only before condition" do
+      let(:restriction) { build(:restriction_date, after: nil, before: today + 2) }
+
+      context "when date is before 'before'" do
+        let(:test_date) { today }
+
+        it "returns valid: true" do
+          expect(subject[:valid]).to be true
+          expect(subject[:reasons]).to be_empty
+        end
+      end
+
+      context "when date is exactly 'before'" do
+        let(:test_date) { today + 2 }
+
+        it "returns valid: false with reason" do
+          expect(subject[:valid]).to be false
+          expect(subject[:reasons]).to include("The date (#{test_date}) must be before #{today + 2}.")
+        end
+      end
+
+      context "when date is after 'before'" do
+        let(:test_date) { today + 5 }
+
+        it "returns valid: false with reason" do
+          expect(subject[:valid]).to be false
+          expect(subject[:reasons]).to include("The date (#{test_date}) must be before #{today + 2}.")
+        end
+      end
+    end
+
+    context "with both after and before conditions" do
+      let(:restriction) { build(:restriction_date, after: today - 2, before: today + 2) }
+
+      context "when date is between after and before" do
+        let(:test_date) { today }
+
+        it "returns valid: true" do
+          expect(subject[:valid]).to be true
+          expect(subject[:reasons]).to be_empty
+        end
+      end
+
+      context "when date is equal to after" do
+        let(:test_date) { today - 2 }
+
+        it "returns valid: false with after reason" do
+          expect(subject[:valid]).to be false
+          expect(subject[:reasons]).to include("The date (#{test_date}) must be after #{today - 2}.")
+        end
+      end
+
+      context "when date is equal to before" do
+        let(:test_date) { today + 2 }
+
+        it "returns valid: false with before reason" do
+          expect(subject[:valid]).to be false
+          expect(subject[:reasons]).to include("The date (#{test_date}) must be before #{today + 2}.")
+        end
+      end
+
+      context "when date fails both" do
+        let(:test_date) { today - 10 }
+
+        it "returns valid: false with after reason" do
+          expect(subject[:valid]).to be false
+          expect(subject[:reasons]).to include("The date (#{test_date}) must be after #{today - 2}.")
+        end
+      end
+    end
+  end
 end

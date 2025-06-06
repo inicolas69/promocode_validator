@@ -3,6 +3,7 @@ require "rails_helper"
 RSpec.describe Restriction, type: :model do
   before do
     allow_any_instance_of(Restriction).to receive(:validate_conditions) # stub the method to avoid validation errors which are tested in subclasses
+    allow_any_instance_of(Restriction).to receive(:satisfies_condition) # stub the method to avoid implementation errors which are tested in subclasses
   end
 
   describe "associations" do

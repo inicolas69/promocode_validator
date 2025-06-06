@@ -13,10 +13,18 @@ class Restriction::Date < Restriction
     end
   end
 
-  def satisfied_by?(context)
-    today = Time.zone.today
-    after_condition = after.nil? || today > after
-    before_condition = before.nil? || today < before
-    after_condition && before_condition
+  def satisfies_condition(context)
+    reasons = []
+    date_to_compare = context[:date].present? ? ::Date.parse(context[:date]) : Time.zone.today
+
+    if after.present? && !(date_to_compare > after)
+      reasons << "The date (#{date_to_compare}) must be after #{after}."
+    end
+
+    if before.present? && !(date_to_compare < before)
+      reasons << "The date (#{date_to_compare}) must be before #{before}."
+    end
+
+    {valid: reasons.empty?, reasons: reasons}
   end
 end
