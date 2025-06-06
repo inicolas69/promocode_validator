@@ -34,7 +34,9 @@ gem "thruster", require: false
 
 # Use Rack CORS for handling Cross-Origin Resource Sharing (CORS), making cross-origin Ajax possible
 # gem "rack-cors"
-
+#
+gem "dotenv-rails"
+gem "httparty"
 gem "store_attribute", "~> 1.0"
 
 group :development, :test do
@@ -58,4 +60,5 @@ group :development, :test do
   gem "ruby-lsp-rails"
   gem "shoulda-matchers"
   gem "standard"
+  gem "webmock"
 end

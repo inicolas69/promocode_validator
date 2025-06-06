@@ -17,4 +17,21 @@ class Restriction::Age < Restriction
       errors.add(:base, "eq cannot be used with lt or gt")
     end
   end
+
+  def satisfies_condition(context)
+    reasons = []
+    age = context[:age].to_i
+
+    if lt.present? && !(age < lt)
+      reasons << "The age (#{age}) must be less than #{lt}."
+    end
+    if gt.present? && !(age > gt)
+      reasons << "The age (#{age}) must be greater than #{gt}."
+    end
+    if eq.present? && age != eq
+      reasons << "The age (#{age}) must be exactly #{eq}."
+    end
+
+    {valid: reasons.empty?, reasons: reasons}
+  end
 end

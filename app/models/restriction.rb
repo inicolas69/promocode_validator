@@ -8,4 +8,8 @@ class Restriction < ApplicationRecord
   def validate_conditions
     raise NotImplementedError, "You must implement the validate_conditions method in the subclass"
   end
+
+  def satisfies_condition(context)
+    raise NotImplementedError, "You must implement the satisfies_condition method in the subclass"
+  end
 end

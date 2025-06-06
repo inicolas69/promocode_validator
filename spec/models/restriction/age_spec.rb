@@ -70,4 +70,125 @@ RSpec.describe Restriction::Age, type: :model do
   describe "associations" do
     it { is_expected.to belong_to(:restriction_group) }
   end
+
+  describe "#satisfies_condition" do
+    let(:context) { {age: user_age} }
+
+    subject { restriction.satisfies_condition(context) }
+
+    context "with only lt condition" do
+      let(:restriction) { build(:restriction_age, lt: 30, gt: nil, eq: nil) }
+
+      context "when age is less than lt" do
+        let(:user_age) { 25 }
+
+        it "returns valid: true" do
+          expect(subject[:valid]).to be true
+          expect(subject[:reasons]).to be_empty
+        end
+      end
+
+      context "when age is equal to lt" do
+        let(:user_age) { 30 }
+
+        it "returns valid: false with reason" do
+          expect(subject[:valid]).to be false
+          expect(subject[:reasons]).to include("The age (30) must be less than 30.")
+        end
+      end
+
+      context "when age is greater than lt" do
+        let(:user_age) { 35 }
+
+        it "returns valid: false with reason" do
+          expect(subject[:valid]).to be false
+          expect(subject[:reasons]).to include("The age (35) must be less than 30.")
+        end
+      end
+    end
+
+    context "with only gt condition" do
+      let(:restriction) { build(:restriction_age, gt: 18, lt: nil, eq: nil) }
+
+      context "when age is greater than gt" do
+        let(:user_age) { 20 }
+
+        it "returns valid: true" do
+          expect(subject[:valid]).to be true
+          expect(subject[:reasons]).to be_empty
+        end
+      end
+
+      context "when age is equal to gt" do
+        let(:user_age) { 18 }
+
+        it "returns valid: false with reason" do
+          expect(subject[:valid]).to be false
+          expect(subject[:reasons]).to include("The age (18) must be greater than 18.")
+        end
+      end
+
+      context "when age is less than gt" do
+        let(:user_age) { 15 }
+
+        it "returns valid: false with reason" do
+          expect(subject[:valid]).to be false
+          expect(subject[:reasons]).to include("The age (15) must be greater than 18.")
+        end
+      end
+    end
+
+    context "with only eq condition" do
+      let(:restriction) { build(:restriction_age, eq: 42, lt: nil, gt: nil) }
+
+      context "when age is exactly eq" do
+        let(:user_age) { 42 }
+
+        it "returns valid: true" do
+          expect(subject[:valid]).to be true
+          expect(subject[:reasons]).to be_empty
+        end
+      end
+
+      context "when age is not eq" do
+        let(:user_age) { 41 }
+
+        it "returns valid: false with reason" do
+          expect(subject[:valid]).to be false
+          expect(subject[:reasons]).to include("The age (41) must be exactly 42.")
+        end
+      end
+    end
+
+    context "with gt and lt conditions" do
+      let(:restriction) { build(:restriction_age, gt: 18, lt: 30, eq: nil) }
+
+      context "when age is between gt and lt" do
+        let(:user_age) { 25 }
+
+        it "returns valid: true" do
+          expect(subject[:valid]).to be true
+          expect(subject[:reasons]).to be_empty
+        end
+      end
+
+      context "when age fails both conditions" do
+        let(:user_age) { 15 }
+
+        it "returns valid: false with both reasons" do
+          expect(subject[:valid]).to be false
+          expect(subject[:reasons]).to include("The age (15) must be greater than 18.")
+        end
+      end
+
+      context "when age fails only one condition" do
+        let(:user_age) { 35 }
+
+        it "returns valid: false with reason" do
+          expect(subject[:valid]).to be false
+          expect(subject[:reasons]).to include("The age (35) must be less than 30.")
+        end
+      end
+    end
+  end
 end

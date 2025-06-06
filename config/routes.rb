@@ -10,7 +10,11 @@ Rails.application.routes.draw do
 
   namespace :api do
     namespace :v1 do
-      resources :promo_codes, only: [:create]
+      resources :promo_codes, only: [:create] do
+        collection do
+          post :validate
+        end
+      end
     end
   end
 end
