@@ -37,7 +37,7 @@ gem "thruster", require: false
 #
 gem "dotenv-rails"
 gem "httparty"
-gem "store_attribute", "~> 1.0"
+gem "store_attribute", "~> 2.0"
 
 group :development, :test do
   # Static analysis for security vulnerabilities [https://brakemanscanner.org/]
