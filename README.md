@@ -12,8 +12,8 @@ Application Rails permettant la gestion de codes promo via une API REST.
 
 1. **Cloner le dépôt**
    ```bash
-   git clone <votre-url-depot>
-   cd <nom-du-projet>
+   git clone https://github.com/inicolas69/promocode_validator.git
+   cd promocode_validator
    ```
 2. **Installer les dépendances**
    ```bash
