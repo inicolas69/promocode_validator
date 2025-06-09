@@ -25,6 +25,14 @@ Application Rails permettant la gestion de codes promo via une API REST.
    rails db:migrate
    rails db:seed
    ```
+4. **Ajouter la clé API pour OpenWeather**
+   ```bash
+   touch .env
+   ```
+   Et y ajouter
+   ```env
+   OPENWEATHER_API_KEY=LA_CLE_API
+   ```
 
 ## ▶️ Lancement du serveur
 
